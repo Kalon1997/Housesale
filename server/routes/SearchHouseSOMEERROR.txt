@@ -1,0 +1,6 @@
+const Route = require('express');
+const Router = Route.Router();
+const { getSearchPageHouses } = require('../controllers/SearchHouse.js');
+
+Router.route('/searchPage/:searchPageUrl').get(getSearchPageHouses)
+module.exports = Router;

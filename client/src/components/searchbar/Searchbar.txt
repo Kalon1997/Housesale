@@ -1,0 +1,79 @@
+import React, {useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {Typeahead} from 'react-bootstrap-typeahead'
+import {sendSearchUrlAction, getLocalitiesAction} from '../../actions/House'
+import './Searchbar.css'
+
+const Searchbar = () => {
+
+const dispatch = useDispatch();    
+
+const locsArray = useSelector((state) => {
+    if(!state.homeState.allLocalities)
+        return []
+    else
+        return state.homeState.allLocalities;          
+})
+
+
+
+const [at, setAt] = useState("Rent")
+const [city, setCity] = useState("Mangaluru")
+const [loc, setLoc] = useState("");
+
+
+const sendSearchQuery  = (e) => {
+    e.preventDefault();
+    const searchUrl = `search?at=${at}&city=${city}&loc=${loc}`
+    dispatch(sendSearchUrlAction(searchUrl))
+    
+    
+}
+
+const getLocalities = (e) => {
+    e.preventDefault();
+    console.log(locsArray)
+}
+
+    return (
+    <div>    
+        <div className="input-group mb-3 px-5 py-5">
+            <div className="input-group-prepend">
+                <button className="btn btn-success dropdown-toggle py-4 atBtn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">{at}</button>
+                <div className="dropdown-menu">
+                    <h5 className="dropdown-item atItem" onClick={(e) => setAt("Rent")} >Rent</h5>
+                    <h5 className="dropdown-item atItem" onClick={(e) => setAt("Buy")} >Buy</h5>
+                    <h5 className="dropdown-item atItem" onClick={(e) => setAt("Lessee")} >Lessee</h5>
+                </div>
+            </div>
+
+            <div className="mx-1 input-group-prepend cur ">
+                <button className="btn btn-success dropdown-toggle py-4 atBtn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">{city}</button>
+                <div onChange={(e)=>{
+                    e.preventDefault();
+                    const searchUrlL = `search?at=${at}&city=${city}`
+    dispatch(getLocalitiesAction(searchUrlL))
+                }} className="dropdown-menu">
+                <h5 className="dropdown-item atItem" onClick={(e) => setCity("Mangaluru")} >Mangaluru</h5>
+                <h5 className="dropdown-item atItem" onClick={(e) => setCity("Bengaluru")} >Bengaluru</h5>
+                <h5 className="dropdown-item atItem" onClick={(e) => setCity("Hyderabad")} >Hyderabad</h5>
+                </div>
+            </div>
+
+            <input className="form-control cur" onClick={(e)=>{getLocalities(e)}} type="text"  aria-label="Text input with dropdown button" placeholder='Select from locations..'  
+            
+            onChange={setLoc}
+            selected={loc} 
+            options={["Bejai","Ballalbagh"]}
+            /> 
+        
+        <button className="btn btn-success py-4 px-5" type="button" onClick={(e) => {sendSearchQuery(e)}}>Search</button>
+        
+        </div>
+
+    </div>    
+    )
+}
+export default Searchbar;
+//onChange={(e) => setLoc(e.target.selected)}
+

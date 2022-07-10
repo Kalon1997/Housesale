@@ -1,0 +1,12 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+.brand{
+    font-family: 'Lobster', cursive;
+    font-size: larger;
+}
+.a{
+    text-decoration: none;
+}
+.navBg{
+    background-color: darkgray;
+}

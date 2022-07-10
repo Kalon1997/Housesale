@@ -1,0 +1,26 @@
+.searchbar{
+    width: 60rem;
+    height: 5rem;
+    padding: 0.5rem;
+    margin: 0.5rem;
+}
+.eachFlex{
+    display: flex;
+    flex-direction: column;
+    height: 3rem;
+}
+
+
+
+
+
+
+.cur{
+    font-size: 30px; 
+}
+.atItem:hover{
+    cursor: pointer;
+}
+.atBtn{
+    width: 10rem;
+}

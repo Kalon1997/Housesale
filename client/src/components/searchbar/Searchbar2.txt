@@ -1,0 +1,132 @@
+import React, {useState} from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {Typeahead} from 'react-bootstrap-typeahead'
+import {sendSearchUrlAction, getLocalitiesAction} from '../../actions/House'
+import './Searchbar.css'
+
+const Searchbar = () => {
+    
+const dispatch = useDispatch();    
+
+const locsArray = useSelector((state) => {
+    if(!state.homeState.allLocalities)
+        return []
+    else
+        return state.homeState.allLocalities;          
+})
+
+const cities = [{
+    id: 0,
+    label: "Mangaluru"
+},
+{
+    id: 1,
+    label: "Hyderabad"
+}]
+
+const [at, setAt] = useState("Rent")
+const [city, setCity] = useState("Mangaluru")
+const [loc, setLoc] = useState("");
+const [newLocList, setnewLocList] = useState([]);
+
+const sendSearchQuery  = (e) => {
+    e.preventDefault();
+    const searchUrl = `search?at=${at}&city=${city}&loc=${loc}`
+    dispatch(sendSearchUrlAction(searchUrl))
+}
+
+const getLocalities = (e) => {
+    e.preventDefault();
+    console.log(locsArray)
+}
+
+    return (
+    <div>    
+        <div className="input-group mb-3 px-5 py-5">
+            <div className="input-group-prepend">
+                <button className="btn btn-success dropdown-toggle py-4 atBtn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">{at}</button>
+                <div className="dropdown-menu">
+                    <h5 className="dropdown-item atItem" onClick={(e) => setAt("Rent")} >Rent</h5>
+                    <h5 className="dropdown-item atItem" onClick={(e) => setAt("Buy")} >Buy</h5>
+                    <h5 className="dropdown-item atItem" onClick={(e) => setAt("Lessee")} >Lessee</h5>
+                </div>
+            </div>
+
+            <div className="mx-1 input-group-prepend cur ">
+                <button className="btn btn-success dropdown-toggle py-4 atBtn" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">{city}</button>
+                <div className="dropdown-menu">
+                {
+                    cities?.map((i, index) => {
+                        return(
+                            <h5 key={index} className="dropdown-item atItem"  
+                            onClick={(e) => {
+                                setCity(i.label)
+                                const searchUrlL = `search?at=${at}&city=${i.label}`
+                                
+                                dispatch(sendSearchUrlAction(searchUrlL))
+                                dispatch(getLocalitiesAction(searchUrlL))
+                                var larray = []
+                                for(var k = 0; k<locsArray.length; ++k)
+                                {
+                                    larray.push(locsArray[k].locality)
+                                }
+                                console.log(larray)
+                                setnewLocList(larray)
+                            }
+                            }
+                                 >{i.label}</h5>  
+                        )
+                    })
+                }
+                </div>
+            </div>
+
+            <Typeahead id="basic-example" className="form-control cur" onClick={(e)=>{getLocalities(e)}} type="text"  aria-label="Text input with dropdown button" placeholder='Select from locations..'  
+            onChange={setLoc}
+            selected={loc} 
+            options={newLocList}
+            /> 
+        
+        <button className="btn btn-success py-4 px-5" type="button" onClick={(e) => {sendSearchQuery(e)}}>Search</button>
+        
+        </div>
+
+    </div>    
+    )
+}
+export default Searchbar;
+//onChange={(e) => setLoc(e.target.selected)}
+
+/////////-------map city
+{
+                    cities?.map((i, index) => {
+                        return(
+                            <h5 key={index} className="dropdown-item atItem"  
+                            onClick={(e) => {
+                                setCity(i.label)
+                                const searchUrlL = `search?at=${at}&city=${i.label}`
+                                
+                                dispatch(sendSearchUrlAction(searchUrlL))
+                                dispatch(sendSearchUrlAction(searchUrlL))
+                                var larray = []
+                                for(var k = 0; k<locsArray.length; ++k)
+                                {
+                                    larray.push(locsArray[k].locality)
+                                }
+                                console.log(larray)
+                                setnewLocList(larray)
+                            }
+                            }
+                                 >{i.label}</h5>  
+                        )
+                    })
+                }
+
+
+
+                =============select in typeahed
+                 <Typeahead id="basic-example"   type="text"  aria-label="Text input with dropdown button" placeholder='Select from locations..'  
+            onChange={setLoc}
+            selected={loc} 
+            options={newLocList}
+            /> 
